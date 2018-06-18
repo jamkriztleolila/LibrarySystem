@@ -48,33 +48,15 @@
 
               echo form_open('Admin/editLibrarian');
             ?>
-      			<div class="box-body" name = "userInfo" id = "userInfo" data-url="<?=base_url();?>">
+      			<div class="box-body" name = "userInfo" id = "userInfo" data-user="Admin"
+                data-url="<?=base_url();?>" data-page="Librarian" data-edit="viewInfoLibrarian" data-avail = "viewAvailLibrarian">
       				<div class="row clearfix">
                 <div class="col-md-12">
-        					<div class="col-md-4">
-        						<label for="id" class="control-label"><span class="text-danger">*</span>Librarian ID #:</label>
-        						<div class="form-group">
-        							<select name="userID" id = "userID" class="form-control">
-        								<option value=""> - - Select Teacher ID - - </option>
-        								<?php
-        								foreach($librarian as $val)
-        								{
-                          if(isset($this->session->userdata['user']['userID'])
-                              && $this->session->userdata['user']['userID'] == $val['id'])
-                            echo '<option value="'.$val['id'].'" selected>'.$val['id'].'</option>';
-                          else
-        									  echo '<option value="'.$val['id'].'">'.$val['id'].'</option>';
-        								}
-        								?>
-        							</select>
-        							<span class="text-danger"><?php echo form_error('id');?></span>
-        						</div>
-        					</div>
-        					<div class="col-md-5">
-        						<label for="school" class="control-label"><span class="text-danger">*</span>School</label>
-        						<div class="form-group">
-        							<select name="userSchool" id ="userSchool" class="form-control">
-        								<option value=""> - - Select School - - </option>
+                  <div class="col-md-4">
+                    <label for="school" class="control-label"><span class="text-danger">*</span>School</label>
+                    <div class="form-group">
+                      <select name="userSchool" id ="userSchool" class="form-control">
+                        <option value=""> - - Select School - - </option>
                         <?php
                           foreach($schools as $val){
                             if(isset($this->session->userdata['user']['userSchool'])
@@ -84,8 +66,31 @@
                               echo '<option value="'.$val['id'].'">'.$val['name'].'</option>';
                           }
                         ?>
+                      </select>
+                      <span class="text-danger"><?php echo form_error('school');?></span>
+                    </div>
+                  </div>
+        					<div class="col-md-5">
+        						<label for="id" class="control-label"><span class="text-danger">*</span>Librarian ID #:</label>
+        						<div class="form-group">
+        							<select name="userID" id = "userID" class="form-control"
+                        <?php
+                          if (!isset($this->session->userdata['user']['userID'])) echo "disabled";
+                        ?>>
+        								<option value=""> - - Select Librarian ID - - </option>
+                        <?php
+                          if(isset($librarian)){
+                            foreach($librarian as $val){
+                              if(isset($this->session->userdata['user']['userID'])
+                                  && $this->session->userdata['user']['schoolId'] == $val['schoolId'])
+                                echo '<option value="'.$val['schoolId'].'" selected>'.$val['schoolId'].'</option>';
+                              else
+                                echo '<option value="'.$val['schoolId'].'">'.$val['schoolId'].'</option>';
+                            }
+                          }
+                        ?>
         							</select>
-        							<span class="text-danger"><?php echo form_error('school');?></span>
+        							<span class="text-danger"><?php echo form_error('id');?></span>
         						</div>
         					</div>
                   <div class="col-md-3" style = "display: flex; align-items: center; justify-content: center; height: 11%">
@@ -95,16 +100,28 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-        					<div class="col-md-12">
-        						<label for="schoolId" class="control-label"><span class="text-danger">*</span>School Id</label>
-        						<div class="form-group">
-        							<input type="text" name="schoolId"
+                  <div class="col-md-6">
+                    <label for="schoolId" class="control-label"><span class="text-danger">*</span>School Id</label>
+                    <div class="form-group">
+                      <input type="text" name="schoolId"
                       value= "<?php if(isset($this->session->userdata['user']['schoolId']))
                               echo $this->session->userdata['user']['schoolId'] ?>"
-                      class="form-control" id="schoolId" style = "width: 40%" />
-        							<span class="text-danger"><?php echo form_error('schoolId');?></span>
-        						</div>
-        					</div>
+                      class="form-control" id="schoolId" />
+                      <span class="text-danger"><?php echo form_error('schoolId');?></span>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="userType" class="control-label">User Type:</label>
+                    <div class="form-group">
+                      <input type="text" name="userType" id = "userType"
+                      value= "<?php if(isset($this->session->userdata['user']['userType']))
+                              echo $this->session->userdata['user']['userType'] ?>"
+                      class="form-control" id="schoolId" readonly/>
+                      <span class="text-danger"><?php echo form_error('schoolId');?></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
                   <div class="col-md-4">
         						<label for="firstName" class="control-label"><span class="text-danger">*</span>FirstName</label>
         						<div class="form-group">
@@ -149,15 +166,24 @@
       			</div>
       			<div class="box-footer"  style = "display: flex; align-items: center; justify-content: center;">
               	<button type="button" class="btn btn-danger" style = "margin:1%" id = "deactivateBtn"
-                name = "deactivateBtn" onclick = "deactivateUser()" disabled>
+                name = "deactivateBtn" onclick = "deactivateUser()"
+                  <?php
+                    if (!isset($this->session->userdata['user'])) echo "disabled";
+                  ?>>
         					<i class="fa fa-ban"></i> Deactivate
         				</button>
                 <button type="submit" class="btn btn-success" style = "margin:1%" id = "saveBtn"
-                name = "saveBtn" disabled>
+                  name = "saveBtn"
+                  <?php
+                    if (!isset($this->session->userdata['user'])) echo "disabled";
+                  ?>>
         					<i class="fa fa-check"></i> Save
         				</button>
-                <button type="submit" class="btn btn-warning" style = "margin:1%"  id = "resetBtn"
-                name = "resetBtn" onclick = "resetPassword()" disabled>
+                <button type="button" class="btn btn-warning" style = "margin:1%"  id = "resetBtn"
+                  name = "resetBtn" onclick = "resetPassword()"
+                  <?php
+                    if (!isset($this->session->userdata['user'])) echo "disabled";
+                  ?>>
         					<i class="fa fa-refresh"></i> Reset Password
         				</button>
   	        </div>

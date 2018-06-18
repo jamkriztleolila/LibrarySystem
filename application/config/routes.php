@@ -52,7 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['login/(:any)'] = 'Authentication/index/$1';
 $route['register/user'] = 'Authentication/userRegistration';
 $route['register/confirmation/(:any)'] = 'Authentication/emailConfirmation/$1';
-$route['OPAC'] = 'Authentication/userRegistration';
+$route['OPAC'] = 'Opac';
 $route['admin'] = 'Admin';
 $route['admin/dashboard'] = 'Admin';
 $route['admin/add/teacher'] = 'Admin/viewAddTeacher';

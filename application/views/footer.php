@@ -35,5 +35,79 @@ $.widget.bridge('uibutton', $.ui.button);
 <script src="<?php echo base_url(); ?>resources/js/js_user.js"></script>
 
 <script src="<?=base_url();?>resources/js/users.js"></script>
+
+<script>
+	if($('#school').length > 0 && $("#userInfo").data('page') == "Librarian"){
+		alert("val");
+		document.getElementById('school').onchange = function() {
+			$("#result").html("");
+			$.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/viewAvailPosition",
+	      {
+	        school: this.value,
+	      },
+	      function(data){
+					if(!Array.isArray(data) || !data.length){
+						res = "No position Available at the moment";
+						$("#result").html(res.fontcolor("red"));
+	          $("#userLevel").prop('disabled', true);
+					}
+					else{
+						var $el = $("#userLevel");
+	          $el.empty(); // remove old options
+	          $el.append($("<option></option>").attr("value", "").text(" - - Select Position - - "));
+	          if(data[0] < 10){
+							$el.append($("<option></option>").attr("value", 1).text("Librarian"));
+						}
+						if(data[1] < 5){
+							$el.append($("<option></option>").attr("value", 2).text("Assistant Librarian"));
+						}
+						if(data[2] < 1){
+							$el.append($("<option></option>").attr("value", 3).text("Head Librarian"));
+						}
+
+	          $('#userLevel').prop('selectedIndex',0);
+	          $("#userLevel").prop('disabled', false);
+					}
+				}, "json");
+		};
+	}
+
+	if($('#userSchool').length > 0){
+		alert("val 2");
+
+		document.getElementById('userSchool').onchange = function() {
+			$("#result").html("");
+			$.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/" + $("#userInfo").data('avail'),
+	      {
+	        school: this.value,
+	      },
+	      function(data){
+					if(!Array.isArray(data) || !data.length){
+						res = "No Librarian Available at the moment";
+						$("#result").html(res.fontcolor("red"));
+	          $("#userID").prop('disabled', true);
+
+						var $el = $("#userID");
+	          $el.empty(); // remove old options
+	          $el.append($("<option></option>").attr("value", "").text(" - - Select Librarian ID - - "));
+
+	          $('#userID').prop('selectedIndex',0);
+
+					}
+					else{
+						var $el = $("#userID");
+	          $el.empty(); // remove old options
+	          $el.append($("<option></option>").attr("value", "").text(" - - Select "+ $("#userInfo").data('page') +" ID - - "));
+						$.each(data, function(key,value) {
+	            $el.append($("<option></option>").attr("value", value['schoolId']).text(value['schoolId']));
+	          });
+
+	          $('#userID').prop('selectedIndex',0);
+	          $("#userID").prop('disabled', false);
+					}
+				}, "json");
+		};
+	}
+</script>
 </body>
 </html>

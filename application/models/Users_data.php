@@ -16,19 +16,43 @@ class Users_data extends CI_Model{
     }
   }
 
+  function getAvailPosition($school){
+    $data = array();
+    for ($position=1; $position < 4; $position++) {
+      $this->db->where('school', $school);
+      $this->db->where('status !=', "deactivated" );
+      $this->db->where('userLevel', $position );
+      $query = $this->db->get('users');
+
+      array_push($data, $query->num_rows());
+    }
+
+    return $data;
+  }
+
   /*
    * Get user by id
    */
   function get_user($id, $school)
   {
-      return $this->db->get_where('users',array('id'=>$id, 'school' => $school))->row_array();
+      return $this->db->get_where('users',array('schoolId'=>$id, 'school' => $school))->row_array();
   }
 
   /*
    * Get all users count
    */
-  function get_all_users_count()
+  function get_all_users_count($params)
   {
+      $this->db->order_by('id', 'desc');
+      if(isset($params) && !empty($params))
+      {
+        if(isset($params['userType']))
+          $this->db->where("userType", $params['userType']);
+        if(isset($params['status']))
+          $this->db->where("status", $params['status']);
+        if(isset($params['school']))
+          $this->db->where("school", $params['school']);
+      }
       $this->db->from('users');
       return $this->db->count_all_results();
   }
@@ -47,6 +71,8 @@ class Users_data extends CI_Model{
           $this->db->where("userType", $params['userType']);
         if(isset($params['status']))
           $this->db->where("status !=", $params['status']);
+        if(isset($params['school']))
+          $this->db->where("school", $params['school']);
       }
       return $this->db->get('users')->result_array();
   }
@@ -82,14 +108,19 @@ class Users_data extends CI_Model{
     }
   }
 
-  function updateUser($id,$params)
+  function updateUser($initial, $params)
   {
-      $this->db->where('id',$id);
+      $this->db->where($initial);
       $this->db->update('users',$params);
-      $data["result"] = "";
-      
-      if($this->db->affected_rows() === 1) {
-        $data["success_message"] = $id." Successfully updated";
+
+      if($this->db->affected_rows() === 1 && isset($params["schoolId"])) {
+        $data["success_message"] = $params["schoolId"]." Successfully updated";
+      }
+      else if($this->db->affected_rows() === 1) {
+        $data["success_message"] = $initial["schoolId"]." Successfully updated";
+      }
+      else if($this->db->affected_rows() === 0) {
+        $data["error_message"] = $initial["schoolId"]." has no changes";
       }
       else{
         $data["error_message"] = "Database Error";
@@ -97,7 +128,6 @@ class Users_data extends CI_Model{
 
       return $data;
   }
-
 
   private function _checkSchoolId($data){
     $this->db->where('schoolId', $data["schoolId"]);
@@ -126,12 +156,13 @@ class Users_data extends CI_Model{
   }
 
   private function _checkPosition($data){
-    
+
     $allowedPeople = 0;
     $this->db->where('school', $data['school']);
     $this->db->where('status !=', "deactivated" );
-    
+
     if($data['userLevel'] == 3){
+      $allowedPeople = 1;
       $this->db->where('userLevel', 3);
       $this->db->where('userType', "librarian");
     }
@@ -146,7 +177,7 @@ class Users_data extends CI_Model{
       $this->db->where('userType', "librarian");
     }
     $query = $this->db->get('users');
-    if($query->num_rows() > $allowedPeople){
+    if($query->num_rows() >= $allowedPeople){
       return true;
     }
     else{

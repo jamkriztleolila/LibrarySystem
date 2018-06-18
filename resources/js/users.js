@@ -6,12 +6,12 @@ function editUser(){
   $("#resetBtn").prop('disabled', true);
   $("#result").html("");
   alert($("#userInfo").data('url'));
-  alert(selectedID.selectedIndex != 0 && selectedSchool.selectedIndex != 0);
+  alert(selectedID.selectedIndex + " "  +selectedID.options[selectedID.selectedIndex].value);
 
   if(selectedID.selectedIndex != 0 && selectedSchool.selectedIndex != 0){
-    $.post($("#userInfo").data('url') + "Admin/viewInfoTeacher",
+    $.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/" + $("#userInfo").data('edit') ,
       {
-        id: selectedID.options[selectedID.selectedIndex].value,
+        schoolId: selectedID.options[selectedID.selectedIndex].value,
         school: selectedSchool.options[selectedSchool.selectedIndex].value,
       },
       function(data){
@@ -19,6 +19,7 @@ function editUser(){
         console.log(data);
         if(data != null){
           $("#schoolId").val(data["schoolId"]);
+          $("#userType").val(data["userType"]);
           $("#firstName").val(data["firstName"]);
           $("#middleName").val(data["middleName"]);
           $("#lastName").val(data["lastName"]);
@@ -29,6 +30,7 @@ function editUser(){
         }
         else{
           $("#schoolId").val("");
+          $("#userType").val("");
           $("#firstName").val("");
           $("#middleName").val("");
           $("#lastName").val("");
@@ -63,10 +65,11 @@ function deactivateUser(){
   alert(selectedID.selectedIndex != 0 && selectedSchool.selectedIndex != 0);
 
   if(selectedID.selectedIndex != 0 && selectedSchool.selectedIndex != 0){
-    $.post($("#userInfo").data('url') + "Admin/deactivateUser",
+    $.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/deactivateUser",
       {
         id: selectedID.options[selectedID.selectedIndex].value,
         school: selectedSchool.options[selectedSchool.selectedIndex].value,
+        userType: $("#userInfo").data('page'),
       },
       function(data){
 
@@ -82,11 +85,9 @@ function deactivateUser(){
           var $el = $("#userID");
           $el.empty(); // remove old options
           $el.append($("<option></option>").attr("value", "").text(" - - Select Teacher ID - - "));
-          $.each(data["teachers"], function(key,value) {
-            $el.append($("<option></option>").attr("value", value['id']).text(value['id']));
-          });
 
           $("#schoolId").val("");
+          $("#userType").val("");
           $("#firstName").val("");
           $("#middleName").val("");
           $("#lastName").val("");
@@ -94,6 +95,9 @@ function deactivateUser(){
           $('#userID').prop('selectedIndex',0);
           $('#userSchool').prop('selectedIndex',0);
           $("#result").html(res.fontcolor("green"));
+          $("#deactivateBtn").prop('disabled', true);
+          $("#saveBtn").prop('disabled', true);
+          $("#resetBtn").prop('disabled', true);
         }
 
       }, "json");
@@ -104,13 +108,14 @@ function resetPassword(){
   var selectedID = document.getElementById("userID");
   var selectedSchool = document.getElementById("userSchool");
 
-  alert(selectedID.selectedIndex != 0 && selectedSchool.selectedIndex != 0);
+  alert($("#userInfo").data('url') + $("#userInfo").data('user') + "/resetPassword");
 
   if(selectedID.selectedIndex != 0 && selectedSchool.selectedIndex != 0){
-    $.post($("#userInfo").data('url') + "Admin/resetPassword",
+    $.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/resetPassword",
       {
         id: selectedID.options[selectedID.selectedIndex].value,
         school: selectedSchool.options[selectedSchool.selectedIndex].value,
+        userType: $("#userInfo").data('page'),
       },
       function(data){
 
@@ -124,12 +129,16 @@ function resetPassword(){
           res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password successfully";
           $("#schoolId").val("");
           $("#firstName").val("");
+          $("#userType").val("");
           $("#middleName").val("");
           $("#lastName").val("");
           $("#email").val("");
           $('#userID').prop('selectedIndex',0);
           $('#userSchool').prop('selectedIndex',0);
           $("#result").html(res.fontcolor("green"));
+          $("#deactivateBtn").prop('disabled', true);
+          $("#saveBtn").prop('disabled', true);
+          $("#resetBtn").prop('disabled', true);
         }
 
       }, "json");

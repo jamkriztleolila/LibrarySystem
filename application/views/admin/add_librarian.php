@@ -20,19 +20,27 @@
                 	<h3 class="box-title">Librarian Information</h3>
               </div>
               <?php echo form_open('Admin/addLibrarian'); ?>
-            	<div class="box-body">
+            	<div class="box-body" name = "userInfo" id = "userInfo" data-user="Admin"
+                  data-url="<?=base_url();?>" data-page="Librarian">
                 <?php
                   if (isset($this->session->userdata['error_message'])) {
-                      echo "<span style=\"color: red;text-align: center; font-weight: bold\">
+                      echo "<span style=\"color: red;text-align: center; font-weight: bold\" id = \"result\" name = \"result\">
                               <div>
                                 <p>".$this->session->userdata['error_message']."</p>
                               </div>
                             </span>";
                   }
                   else if(isset($this->session->userdata['result'])){
-                    echo "<span style=\"color: green;text-align: center; font-weight: bold\">
+                    echo "<span style=\"color: green;text-align: center; font-weight: bold\" id = \"result\" name = \"result\">
                             <div>
                               <p> New Teacher (ID #: ".$this->session->userdata['result']['id'].") has been registered!</p>
+                            </div>
+                          </span>";
+                  }
+                  else{
+                    echo "<span style=\"text-align: center; font-weight: bold\">
+                            <div>
+                              <p  id = \"result\" name = \"result\"></p>
                             </div>
                           </span>";
                   }
@@ -50,7 +58,7 @@
         					<div class="col-md-6">
         						<label for="school" class="control-label"><span class="text-danger">*</span>School</label>
         						<div class="form-group">
-        							<select name="school" class="form-control">
+        							<select name="school" id="school" class="form-control">
                         <option disabled selected value> - - Select School - - </option>
                         <?php
                           foreach($schools as $val){
@@ -64,11 +72,8 @@
                   <div class="col-md-6">
         						<label for="userLevel" class="control-label"><span class="text-danger">*</span>UserLevel</label>
         						<div class="form-group">
-        							<select name="userLevel" class="form-control">
+        							<select name="userLevel" id="userLevel" class="form-control" disabled>
         								<option disabled selected value> - - Select Position - - </option>
-                        <option value="1">Librarian</option>
-                        <option value="2">Assistant Librarian</option>
-                        <option value="3">Head Librarian</option>
         							</select>
         						</div>
         					</div>
