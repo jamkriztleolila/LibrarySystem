@@ -2,12 +2,12 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Edit Librarian
+      Edit Student
     </h1>
     <ol class="breadcrumb">
       <li><a href="<?=base_url()."Admin";?>"><i class="fa fa-dashboard"></i> Home</a></li>
       <li>Edit</li>
-      <li class="active">Librarian</li>
+      <li class="active">Student</li>
     </ol>
   </section>
 
@@ -17,7 +17,7 @@
       <div class="col-md-12">
       	<div class="box box-info">
             <div class="box-header with-border">
-              	<h3 class="box-title">Librarian Information</h3>
+              	<h3 class="box-title">Student Information</h3>
             </div>
             <?php
               if (isset($this->session->userdata['error_message'])) {
@@ -46,13 +46,13 @@
                       </span>";
               }
 
-              echo form_open('Admin/editLibrarian');
+              echo form_open('Admin/editStudent');
             ?>
       			<div class="box-body" name = "userInfo" id = "userInfo" data-user="Admin"
-                data-url="<?=base_url();?>" data-page="Librarian" data-edit="viewInfoLibrarian" data-avail = "viewAvailLibrarian">
+                data-url="<?=base_url();?>" data-page="Student" data-edit="viewInfoStudent" data-avail = "viewAvailStudent">
       				<div class="row clearfix">
                 <div class="col-md-12">
-                  <div class="col-md-4">
+                  <div class="col-md-5">
                     <label for="school" class="control-label"><span class="text-danger">*</span>School</label>
                     <div class="form-group">
                       <select name="userSchool" id ="userSchool" class="form-control">
@@ -70,17 +70,17 @@
                       <span class="text-danger"><?php echo form_error('school');?></span>
                     </div>
                   </div>
-        					<div class="col-md-5">
-        						<label for="id" class="control-label"><span class="text-danger">*</span>Librarian ID #:</label>
+        					<div class="col-md-4">
+        						<label for="id" class="control-label"><span class="text-danger">*</span>Student ID #:</label>
         						<div class="form-group">
-        							<select name="userID" id = "userID" class="form-control"
+                      <select name="userID" id = "userID" class="form-control"
                         <?php
                           if (!isset($this->session->userdata['user']['userID'])) echo "disabled";
                         ?>>
-        								<option value=""> - - Select Librarian ID - - </option>
+        								<option value=""> - - Select Student ID - - </option>
                         <?php
-                          if(isset($librarians)){
-                            foreach($librarians as $val){
+                          if(isset($students)){
+                            foreach($students as $val){
                               if(isset($this->session->userdata['user']['userID'])
                                   && $this->session->userdata['user']['schoolId'] == $val['schoolId'])
                                 echo '<option value="'.$val['schoolId'].'" selected>'.$val['schoolId'].'</option>';
@@ -100,30 +100,16 @@
                   </div>
                 </div>
                 <div class="col-md-12">
-                  <div class="col-md-6">
-                    <label for="schoolId" class="control-label"><span class="text-danger">*</span>School Id</label>
-                    <div class="form-group">
-                      <input type="text" name="schoolId" id="schoolId"
+        					<div class="col-md-12">
+        						<label for="schoolId" class="control-label"><span class="text-danger">*</span>School Id</label>
+        						<div class="form-group">
+        							<input type="text" name="schoolId"
                       value= "<?php if(isset($this->session->userdata['user']['schoolId']))
                               echo $this->session->userdata['user']['schoolId'] ?>"
-                      class="form-control"/>
-                      <span class="text-danger"><?php echo form_error('schoolId');?></span>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label for="position" class="control-label">Position:</label>
-                    <div class="form-group">
-                      <input type="text" name="position" id = "position"
-                      value= "<?php
-                              if(isset($this->session->userdata['user']['position'])){
-                                echo $this->session->userdata['user']['position'];
-                              }?>"
-                      class="form-control" readonly/>
-                      <span class="text-danger"><?php echo form_error('schoolId');?></span>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-12">
+                      class="form-control" id="schoolId" style = "width: 40%" />
+        							<span class="text-danger"><?php echo form_error('schoolId');?></span>
+        						</div>
+        					</div>
                   <div class="col-md-4">
         						<label for="firstName" class="control-label"><span class="text-danger">*</span>FirstName</label>
         						<div class="form-group">
@@ -175,14 +161,14 @@
         					<i class="fa fa-ban"></i> Deactivate
         				</button>
                 <button type="submit" class="btn btn-success" style = "margin:1%" id = "saveBtn"
-                  name = "saveBtn"
+                name = "saveBtn"
                   <?php
                     if (!isset($this->session->userdata['user'])) echo "disabled";
                   ?>>
         					<i class="fa fa-check"></i> Save
         				</button>
                 <button type="button" class="btn btn-warning" style = "margin:1%"  id = "resetBtn"
-                  name = "resetBtn" onclick = "resetPassword()"
+                name = "resetBtn" onclick = "resetPassword()"
                   <?php
                     if (!isset($this->session->userdata['user'])) echo "disabled";
                   ?>>

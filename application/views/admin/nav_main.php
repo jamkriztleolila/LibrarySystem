@@ -35,11 +35,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				<i class="fa fa-dashboard"></i> <span>Dashboard</span>
 			</a>
 		</li>
-		<li class="<?php //if($active == "counseling"){echo "active";}?>">
-			<a href="<?=base_url();?>">
-				<i class="fa fa-files-o"></i> <span>System Settings</span>
-			</a>
-		</li>
     <li class="treeview">
       <a href="#">
         <i class="fa fa-files-o"></i>
@@ -49,18 +44,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </span>
       </a>
       <ul class="treeview-menu">
-        <li>
-          <a href="#"><i class="fa fa-circle-o"></i> Admin
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="<?=base_url();?>admin/add/admin"><i class="fa fa-circle-o"></i> New</a></li>
-            <li><a href="<?=base_url();?>admin/edit/admin"><i class="fa fa-circle-o"></i> Update</a></li>
-            <li><a href="<?=base_url();?>admin/view/admin"><i class="fa fa-circle-o"></i> View</a></li>
-          </ul>
-        </li>
         <li>
           <a href="#"><i class="fa fa-circle-o"></i> Librarian
             <span class="pull-right-container">
@@ -108,10 +91,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </span>
       </a>
       <ul class="treeview-menu">
-        <li><a href="#"><i class="fa fa-circle-o"></i> New</a></li>
-        <li><a href="#"><i class="fa fa-circle-o"></i> Update</a></li>
-        <li><a href="#"><i class="fa fa-circle-o"></i> View</a></li>
-        <li><a href="#"><i class="fa fa-circle-o"></i> Settings</a></li>
+        <li><a href="<?=base_url();?>admin/add/school"><i class="fa fa-circle-o"></i> New</a></li>
+        <li><a href="<?=base_url();?>admin/edit/school"><i class="fa fa-circle-o"></i> Update</a></li>
+        <li><a href="<?=base_url();?>admin/view/school"><i class="fa fa-circle-o"></i> View</a></li>
+        <li><a href="<?=base_url();?>admin/edit/school/settings"><i class="fa fa-circle-o"></i> Settings</a></li>
       </ul>
     </li>
 	</ul>

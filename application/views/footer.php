@@ -77,35 +77,51 @@ $.widget.bridge('uibutton', $.ui.button);
 
 		document.getElementById('userSchool').onchange = function() {
 			$("#result").html("");
-			$.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/" + $("#userInfo").data('avail'),
-	      {
-	        school: this.value,
-	      },
-	      function(data){
-					if(!Array.isArray(data) || !data.length){
-						res = "No Librarian Available at the moment";
-						$("#result").html(res.fontcolor("red"));
-	          $("#userID").prop('disabled', true);
+			resetUpdateForm();
+			if(this.value != ""){
+				$.post($("#userInfo").data('url') + $("#userInfo").data('user') + "/" + $("#userInfo").data('avail'),
+					{
+						school: this.value,
+					},
+					function(data){
+						if(!Array.isArray(data) || !data.length){
+							res = "No " +  $("#userInfo").data('page') + " Available at the moment";
+							$("#result").html(res.fontcolor("red"));
+							$("#userID").prop('disabled', true);
 
-						var $el = $("#userID");
-	          $el.empty(); // remove old options
-	          $el.append($("<option></option>").attr("value", "").text(" - - Select Librarian ID - - "));
+							var $el = $("#userID");
+							$el.empty(); // remove old options
+							$el.append($("<option></option>").attr("value", "").text(" - - Select Librarian ID - - "));
 
-	          $('#userID').prop('selectedIndex',0);
+							$('#userID').prop('selectedIndex',0);
 
-					}
-					else{
-						var $el = $("#userID");
-	          $el.empty(); // remove old options
-	          $el.append($("<option></option>").attr("value", "").text(" - - Select "+ $("#userInfo").data('page') +" ID - - "));
-						$.each(data, function(key,value) {
-	            $el.append($("<option></option>").attr("value", value['schoolId']).text(value['schoolId']));
-	          });
+						}
+						else{
+							var $el = $("#userID");
+							$el.empty(); // remove old options
+							$el.append($("<option></option>").attr("value", "").text(" - - Select "+ $("#userInfo").data('page') +" ID - - "));
+							$.each(data, function(key,value) {
+								$el.append($("<option></option>").attr("value", value['schoolId']).text(value['schoolId']));
+							});
 
-	          $('#userID').prop('selectedIndex',0);
-	          $("#userID").prop('disabled', false);
-					}
-				}, "json");
+							$('#userID').prop('selectedIndex',0);
+							$("#userID").prop('disabled', false);
+						}
+					}, "json");
+			}
+			else{
+				$('#userID').prop('selectedIndex',0);
+				$("#userID").prop('disabled', true);
+			}
+		};
+	}
+
+	if($('#userID').length > 0){
+		alert("val 3");
+
+		document.getElementById('userID').onchange = function() {
+			$("#result").html("");
+			resetUpdateForm();
 		};
 	}
 </script>

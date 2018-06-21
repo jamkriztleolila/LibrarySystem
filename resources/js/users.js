@@ -19,7 +19,6 @@ function editUser(){
         console.log(data);
         if(data != null){
           $("#schoolId").val(data["schoolId"]);
-          $("#userType").val(data["userType"]);
           $("#firstName").val(data["firstName"]);
           $("#middleName").val(data["middleName"]);
           $("#lastName").val(data["lastName"]);
@@ -27,10 +26,24 @@ function editUser(){
           $("#deactivateBtn").prop('disabled', false);
           $("#saveBtn").prop('disabled', false);
           $("#resetBtn").prop('disabled', false);
+
+          if(data["userType"] == "librarian"){
+            switch (data['userLevel']) {
+              case "3":
+                $("#position").val("Head Librarian");
+                break;
+              case "2":
+                $("#position").val("Assistant Librarian");
+                break;
+              case "1":
+                $("#position").val("Librarian");
+                break;
+            }
+          }
         }
         else{
           $("#schoolId").val("");
-          $("#userType").val("");
+          $("#position").val("");
           $("#firstName").val("");
           $("#middleName").val("");
           $("#lastName").val("");
@@ -50,11 +63,13 @@ function editUser(){
       $("#schoolId").val("");
       $("#firstName").val("");
       $("#middleName").val("");
+      $("#position").val("");
       $("#lastName").val("");
       $("#email").val("");
       $('#userID').prop('selectedIndex',0);
       $('#userSchool').prop('selectedIndex',0);
       $("#result").html(res.fontcolor("red"));
+      $("#userID").prop('disabled', true);
   }
 }
 
@@ -87,7 +102,6 @@ function deactivateUser(){
           $el.append($("<option></option>").attr("value", "").text(" - - Select Teacher ID - - "));
 
           $("#schoolId").val("");
-          $("#userType").val("");
           $("#firstName").val("");
           $("#middleName").val("");
           $("#lastName").val("");
@@ -98,6 +112,10 @@ function deactivateUser(){
           $("#deactivateBtn").prop('disabled', true);
           $("#saveBtn").prop('disabled', true);
           $("#resetBtn").prop('disabled', true);
+          $("#userID").prop('disabled', true);
+
+          if($("#position").length > 0)
+            $("#position").val("");
         }
 
       }, "json");
@@ -125,11 +143,14 @@ function resetPassword(){
           res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password failed";
           $("#result").html(res.fontcolor("red"));
         }
+        else if(data["error_message"] != null){
+          res = data["error_message"];
+          $("#result").html(res.fontcolor("red"));
+        }
         else{
           res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password successfully";
           $("#schoolId").val("");
           $("#firstName").val("");
-          $("#userType").val("");
           $("#middleName").val("");
           $("#lastName").val("");
           $("#email").val("");
@@ -139,8 +160,26 @@ function resetPassword(){
           $("#deactivateBtn").prop('disabled', true);
           $("#saveBtn").prop('disabled', true);
           $("#resetBtn").prop('disabled', true);
+          $("#userID").prop('disabled', true);
+
+          if($("#position").length > 0)
+            $("#position").val("");
         }
 
       }, "json");
   }
+}
+
+function resetUpdateForm(){
+  $("#schoolId").val("");
+  $("#firstName").val("");
+  $("#middleName").val("");
+  $("#lastName").val("");
+  $("#email").val("");
+  $("#deactivateBtn").prop('disabled', true);
+  $("#saveBtn").prop('disabled', true);
+  $("#resetBtn").prop('disabled', true);
+
+  if($("#position").length > 0)
+    $("#position").val("");
 }

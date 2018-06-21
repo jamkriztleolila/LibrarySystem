@@ -2,12 +2,12 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      View Teachers
+      View Students
     </h1>
     <ol class="breadcrumb">
       <li><a href="<?=base_url()."Admin";?>"><i class="fa fa-dashboard"></i> Home</a></li>
       <li>View</li>
-      <li class="active">Teachers</li>
+      <li class="active">Students</li>
     </ol>
   </section>
 
@@ -17,7 +17,7 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">List of Teachers</h3>
+                    <h3 class="box-title">List of Students</h3>
                 	<div class="box-tools">
                   </div>
                 </div>

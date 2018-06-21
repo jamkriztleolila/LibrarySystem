@@ -6,7 +6,7 @@ class Users_data extends CI_Model{
 
   public function getSchools(){
     $this->db->select('id, name');
-    $query = $this->db->get('schools');
+    $query = $this->db->get('school_data');
     if($query->num_rows() > 0){
       $result = $query->result_array();
       return $result;
@@ -43,7 +43,6 @@ class Users_data extends CI_Model{
    */
   function get_all_users_count($params)
   {
-      $this->db->order_by('id', 'desc');
       if(isset($params) && !empty($params))
       {
         if(isset($params['userType']))
@@ -62,6 +61,7 @@ class Users_data extends CI_Model{
    */
   function get_all_users($params = array())
   {
+      $this->db->order_by('school', 'asc');
       $this->db->order_by('id', 'desc');
       if(isset($params) && !empty($params))
       {
@@ -73,7 +73,7 @@ class Users_data extends CI_Model{
           $this->db->where("status !=", $params['status']);
         if(isset($params['school']))
           $this->db->where("school", $params['school']);
-      }
+      };
       return $this->db->get('users')->result_array();
   }
 
