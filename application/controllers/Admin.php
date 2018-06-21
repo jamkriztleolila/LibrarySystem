@@ -290,6 +290,17 @@ class Admin extends CI_Controller {
       $this->load->view('footer');
   }
 
+  public function viewAddSetting(){
+    $data['user_in'] = $this->session->userdata('user_in');
+    $data['schools'] = $this->Schools_data->get_all_schools();
+
+    $this->load->view('head');
+    $this->load->view('admin\header', $data);
+    $this->load->view('admin\nav_main', $data);
+    $this->load->view('admin\add_setting', $data);
+    $this->load->view('footer');
+  }
+
   public function addTeacher()
   {
     		$this->form_validation->set_rules('schoolId','SchoolId','required');
@@ -544,6 +555,46 @@ class Admin extends CI_Controller {
           $this->session->set_flashdata('user',  $this->input->post());
           redirect('admin/edit/student');
         }
+  }
+
+  public function addSchool()
+  {
+        $this->form_validation->set_rules('name','Name','required');
+        $this->form_validation->set_rules('address','Address','required');
+        $this->form_validation->set_rules('id','ID','required');
+
+        if($this->form_validation->run())
+        {
+          if($this->Schools_data->checkID($this->input->post("id"))){
+            $data['error_message'] = "ID ( " . $this->input->post("id") . " ) Already Exists";
+            $this->session->set_flashdata('error_message',  $data['error_message']);
+            redirect('admin/add/school');
+          }
+
+          $params = array(
+            'id' => $this->input->post('id'),
+            'name' => $this->input->post('name'),
+            'address' => $this->input->post('address'),
+            'contact' => $this->input->post('contact'),
+          );
+
+          $result = $this->Schools_data->addSchool($params);
+          if(isset($result["error_message"])){
+            $this->session->set_flashdata('error_message',  $result["error_message"]);
+            redirect('admin/add/school');
+          }
+          else{
+            $this->session->set_flashdata('school', $result);
+            redirect('admin/add/school/settings');
+          }
+      }
+      else
+      {
+          $data['error_message'] = validation_errors();
+          $data['error_message'] = explode("</p>", $data['error_message']);
+          $this->session->set_flashdata('error_message',  $data['error_message'][0]);
+          redirect('admin/add/school');
+      }
   }
 
   public function deactivateUser(){
