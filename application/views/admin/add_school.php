@@ -30,47 +30,57 @@
                               </div>
                             </span>";
                   }
-                  else if(isset($this->session->userdata['result'])){
-                    echo "<span style=\"color: green;text-align: center; font-weight: bold\" id = \"result\" name = \"result\">
-                            <div>
-                              <p> New Teacher (ID #: ".$this->session->userdata['result']['id'].") has been registered!</p>
-                            </div>
-                          </span>";
-                  }
                   else{
                     echo "<span style=\"text-align: center; font-weight: bold\">
                             <div>
                               <p  id = \"result\" name = \"result\"></p>
                             </div>
                           </span>";
+
                   }
                 ?>
           		<div class="row clearfix">
             		<div class="col-md-6">
-            			<label for="name" class="control-label"><span class="text-danger">*</span>ID:</label>
+            			<label for="id" class="control-label"><span class="text-danger">*</span>ID:</label>
             			<div class="form-group">
-            				<input type="text" name="id" id = "id" value="<?php echo $this->input->post('name'); ?>" class="form-control" id="name" />
-            				<span class="text-danger"><?php echo form_error('name');?></span>
+            				<input type="text" name="id" id = "id"
+							value="<?php
+							if(isset($this->session->userdata['school']["id"]))
+								echo $this->session->userdata['school']["id"];
+							?>" class="form-control" id="name" />
+            				<span class="text-danger"><?php echo form_error('id');?></span>
             			</div>
             		</div>
             		<div class="col-md-6">
             			<label for="name" class="control-label"><span class="text-danger">*</span>Name</label>
             			<div class="form-group">
-            				<input type="text" name="name" id="name" value="<?php echo $this->input->post('name'); ?>" class="form-control" id="name" />
+            				<input type="text" name="name" id="name"
+							value="<?php
+							if(isset($this->session->userdata['school']["name"]))
+								echo $this->session->userdata['school']["name"];
+							?>" class="form-control" id="name" />
             				<span class="text-danger"><?php echo form_error('name');?></span>
             			</div>
             		</div>
             		<div class="col-md-6">
             			<label for="address" class="control-label"><span class="text-danger">*</span>Address</label>
             			<div class="form-group">
-            				<input type="text" name="address" id="address" value="<?php echo $this->input->post('address'); ?>" class="form-control" id="address" />
+            				<input type="text" name="address" id="address"
+							value="<?php
+							if(isset($this->session->userdata['school']["address"]))
+								echo $this->session->userdata['school']["address"];
+							?>" class="form-control" id="address" />
             				<span class="text-danger"><?php echo form_error('address');?></span>
             			</div>
             		</div>
             		<div class="col-md-6">
             			<label for="contact" class="control-label">Contact</label>
             			<div class="form-group">
-            				<input type="text" name="contact" id="contact" value="<?php echo $this->input->post('contact'); ?>" class="form-control" id="contact" />
+            				<input type="text" name="contact" id="contact"
+							value="<?php
+							if(isset($this->session->userdata['school']["contact"]))
+								echo $this->session->userdata['school']["contact"];
+							?>" class="form-control" id="contact" />
             			</div>
             		</div>
             	</div>

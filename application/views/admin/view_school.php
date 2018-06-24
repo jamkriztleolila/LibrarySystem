@@ -31,24 +31,23 @@ div class="content-wrapper">
               <th>Contact</th>
               <th>Actions</th>
                       </tr>
-                      <?php foreach($schools as $s){ ?>
-                      <tr>
-              <td><?php echo $s['id']; ?></td>
-              <td><?php echo $s['name']; ?></td>
-              <td><?php echo $s['address']; ?></td>
-              <td><?php echo $s['contact']; ?></td>
-              <td>
-                              <a href="<?php echo site_url('school/edit/'.$s['id']); ?>" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span> Edit</a>
-                              <a href="<?php echo site_url('school/remove/'.$s['id']); ?>" class="btn btn-danger btn-xs"><span class="fa fa-trash"></span> Delete</a>
-                          </td>
-                      </tr>
-                      <?php } ?>
-                  </table>
-                  <div class="pull-right">
-                      <?php echo $this->pagination->create_links(); ?>
-                  </div>
-              </div>
+              <?php foreach($schools as $s){ ?>
+              <tr>
+                <td><?php echo $s['id']; ?></td>
+                <td><?php echo $s['name']; ?></td>
+                <td><?php echo $s['status']; ?></td>
+                <td>
+                    <a href="<?php echo site_url('school/remove/'.$s['id']); ?>" class="btn btn-xs"><span class="fa fa-eye"></span> View</a>
+                    <a href="<?php echo site_url('school/edit/'.$s['id']); ?>" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span> Edit</a>
+                </td>
+              </tr>
+              <?php } ?>
+            </table>
+            <div class="pull-right">
+                <?php echo $this->pagination->create_links(); ?>
+            </div>
           </div>
+        </div>
       </div>
     </div>
   </section>

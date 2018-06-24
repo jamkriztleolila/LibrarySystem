@@ -91,15 +91,15 @@ function deactivateUser(){
         console.log(data);
         var res = "";
         if(data == null){
-          res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") was not deactivated";
+          res = $("#userInfo").data('page') + " (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") was not deactivated";
           $("#result").html(res.fontcolor("red"));
         }
         else{
-          res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") has been successfully deactivated";
+          res = $("#userInfo").data('page') + " (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") has been successfully deactivated";
 
           var $el = $("#userID");
           $el.empty(); // remove old options
-          $el.append($("<option></option>").attr("value", "").text(" - - Select Teacher ID - - "));
+          $el.append($("<option></option>").attr("value", "").text(" - - Select " + $("#userInfo").data('page') + " ID - - "));
 
           $("#schoolId").val("");
           $("#firstName").val("");
@@ -140,7 +140,7 @@ function resetPassword(){
         console.log(data);
         var res = "";
         if(data == null){
-          res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password failed";
+          res = $("#userInfo").data('page') + " (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password failed";
           $("#result").html(res.fontcolor("red"));
         }
         else if(data["error_message"] != null){
@@ -148,7 +148,12 @@ function resetPassword(){
           $("#result").html(res.fontcolor("red"));
         }
         else{
-          res = "Teacher (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password successfully";
+          res = $("#userInfo").data('page') + " (ID #: " + selectedID.options[selectedID.selectedIndex].value + ") reset password successfully";
+
+          var $el = $("#userID");
+          $el.empty(); // remove old options
+          $el.append($("<option></option>").attr("value", "").text(" - - Select " + $("#userInfo").data('page') + " ID - - "));
+
           $("#schoolId").val("");
           $("#firstName").val("");
           $("#middleName").val("");

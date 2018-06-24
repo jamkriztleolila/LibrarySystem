@@ -59,8 +59,8 @@
                         <option value=""> - - Select School - - </option>
                         <?php
                           foreach($schools as $val){
-                            if(isset($this->session->userdata['user']['userSchool'])
-                                && $this->session->userdata['user']['userSchool'] == $val['id'])
+                            if(isset($user['userSchool'])
+                                && $user['userSchool'] == $val['id'])
                               echo '<option value="'.$val['id'].'" selected>'.$val['name'].'</option>';
                             else
                               echo '<option value="'.$val['id'].'">'.$val['name'].'</option>';
@@ -75,14 +75,14 @@
         						<div class="form-group">
                       <select name="userID" id = "userID" class="form-control"
                         <?php
-                          if (!isset($this->session->userdata['user']['userID'])) echo "disabled";
+                          if (!isset($user['userID'])) echo "disabled";
                         ?>>
         								<option value=""> - - Select Teacher ID - - </option>
                         <?php
                           if(isset($teachers)){
                             foreach($teachers as $val){
-                              if(isset($this->session->userdata['user']['userID'])
-                                  && $this->session->userdata['user']['schoolId'] == $val['schoolId'])
+                              if(isset($user['userID'])
+                                  && $user['schoolId'] == $val['schoolId'])
                                 echo '<option value="'.$val['schoolId'].'" selected>'.$val['schoolId'].'</option>';
                               else
                                 echo '<option value="'.$val['schoolId'].'">'.$val['schoolId'].'</option>';
@@ -104,8 +104,8 @@
         						<label for="schoolId" class="control-label"><span class="text-danger">*</span>School Id</label>
         						<div class="form-group">
         							<input type="text" name="schoolId"
-                      value= "<?php if(isset($this->session->userdata['user']['schoolId']))
-                              echo $this->session->userdata['user']['schoolId'] ?>"
+                      value= "<?php if(isset($user['schoolId']))
+                              echo $user['schoolId'] ?>"
                       class="form-control" id="schoolId" style = "width: 40%" />
         							<span class="text-danger"><?php echo form_error('schoolId');?></span>
         						</div>
@@ -114,8 +114,8 @@
         						<label for="firstName" class="control-label"><span class="text-danger">*</span>FirstName</label>
         						<div class="form-group">
         							<input type="text" name="firstName"
-                      value= "<?php if(isset($this->session->userdata['user']['firstName']))
-                              echo $this->session->userdata['user']['firstName'] ?>"
+                      value= "<?php if(isset($user['firstName']))
+                              echo $user['firstName'] ?>"
                       class="form-control" id="firstName" />
         							<span class="text-danger"><?php echo form_error('firstName');?></span>
         						</div>
@@ -133,8 +133,8 @@
         						<label for="lastName" class="control-label"><span class="text-danger">*</span>LastName</label>
         						<div class="form-group">
         							<input type="text" name="lastName"
-                      value= "<?php if(isset($this->session->userdata['user']['lastName']))
-                              echo $this->session->userdata['user']['lastName'] ?>"
+                      value= "<?php if(isset($user['lastName']))
+                              echo $user['lastName'] ?>"
                       class="form-control" id="lastName" />
         							<span class="text-danger"><?php echo form_error('lastName');?></span>
         						</div>
@@ -143,8 +143,8 @@
         						<label for="email" class="control-label"><span class="text-danger">*</span>Email</label>
         						<div class="form-group">
         							<input type="text" name="email"
-                      value= "<?php if(isset($this->session->userdata['user']['email']))
-                              echo $this->session->userdata['user']['email'] ?>"
+                      value= "<?php if(isset($user['email']))
+                              echo $user['email'] ?>"
                       class="form-control" id="email" />
         							<span class="text-danger"><?php echo form_error('email');?></span>
         						</div>

@@ -25,9 +25,13 @@ class Admin extends CI_Controller {
 		$this->load->view('footer');
   }
 
-  public function viewEditTeacher(){
-    $data['schools'] = $this->Users_data->getSchools();;
+  public function viewEditTeacher($id = "", $school = ""){
+    $data['schools'] = $this->Users_data->getSchools();
     $data['user_in'] = $this->session->userdata('user_in');
+
+    if(isset($this->session->userdata['user'])){
+      $data['user'] = $this->session->userdata['user'];
+    }
 
     if(isset($this->session->userdata['teachers']))
       $data['teachers'] = $this->session->userdata('teachers');
@@ -254,7 +258,6 @@ class Admin extends CI_Controller {
 
   public function viewAvailSchool(){
     $params['school'] = $this->input->post('school');
-    $params['userType'] = "student";
     $params['status'] = "deactivated";
     echo  json_encode($this->Users_data->get_all_users($params));
   }
@@ -290,10 +293,18 @@ class Admin extends CI_Controller {
       $this->load->view('footer');
   }
 
-  public function viewAddSetting(){
+  public function viewDefaultSettings(){
     $data['user_in'] = $this->session->userdata('user_in');
-    $data['schools'] = $this->Schools_data->get_all_schools();
-
+    if(isset($this->session->userdata['school'])){
+      $data["setting"] = $this->Schools_data->getSchoolSetting($this->session->userdata['school']["id"]);
+      $data['school'] = $this->Schools_data->getSchool($this->session->userdata['school']["schoolID"]);
+    }
+    else if(isset($this->session->userdata['setting'])){
+      $data["setting"] = $this->session->userdata['setting'];
+      $data['school'] = $this->Schools_data->getSchool($this->session->userdata['setting']["school"]);
+    }
+    echo "asn". floatval(0.00);
+    echo "asn". intval(0);
     $this->load->view('head');
     $this->load->view('admin\header', $data);
     $this->load->view('admin\nav_main', $data);
@@ -507,10 +518,10 @@ class Admin extends CI_Controller {
           $this->session->set_flashdata('error_message',  $data['error_message'][0]);
           redirect('admin/add/student');
       }
-  }
+	}
 
-  public function editStudent()
-  {
+	public function editStudent()
+	{
         $this->form_validation->set_rules('schoolId','SchoolId','required');
         $this->form_validation->set_rules('email','Email','required|valid_email');
         $this->form_validation->set_rules('firstName','FirstName','required');
@@ -555,7 +566,7 @@ class Admin extends CI_Controller {
           $this->session->set_flashdata('user',  $this->input->post());
           redirect('admin/edit/student');
         }
-  }
+	}
 
   public function addSchool()
   {
@@ -563,41 +574,115 @@ class Admin extends CI_Controller {
         $this->form_validation->set_rules('address','Address','required');
         $this->form_validation->set_rules('id','ID','required');
 
+        $params = array(
+            'id' => $this->input->post('id'),
+            'name' => $this->input->post('name'),
+            'address' => $this->input->post('address'),
+            'contact' => $this->input->post('contact'),
+        );
+
         if($this->form_validation->run())
         {
           if($this->Schools_data->checkID($this->input->post("id"))){
             $data['error_message'] = "ID ( " . $this->input->post("id") . " ) Already Exists";
             $this->session->set_flashdata('error_message',  $data['error_message']);
+            $this->session->set_flashdata('school', $params);
             redirect('admin/add/school');
           }
 
-          $params = array(
-            'id' => $this->input->post('id'),
-            'name' => $this->input->post('name'),
-            'address' => $this->input->post('address'),
-            'contact' => $this->input->post('contact'),
-          );
+          if(empty($this->input->post["contact"])) $params["contact"] = null;
 
           $result = $this->Schools_data->addSchool($params);
+
           if(isset($result["error_message"])){
             $this->session->set_flashdata('error_message',  $result["error_message"]);
+            $this->session->set_flashdata('school', $params);
             redirect('admin/add/school');
           }
           else{
             $this->session->set_flashdata('school', $result);
             redirect('admin/add/school/settings');
           }
-      }
-      else
-      {
-          $data['error_message'] = validation_errors();
-          $data['error_message'] = explode("</p>", $data['error_message']);
-          $this->session->set_flashdata('error_message',  $data['error_message'][0]);
-          redirect('admin/add/school');
-      }
-  }
+		}
+		else
+		{
+			$data['error_message'] = validation_errors();
+			$data['error_message'] = explode("</p>", $data['error_message']);
+			$this->session->set_flashdata('error_message',  $data['error_message'][0]);
+			redirect('admin/add/school');
+		}
+	}
 
-  public function deactivateUser(){
+	public function addSettings()
+  {
+		$this->form_validation->set_rules('school','School ID','required');
+		$this->form_validation->set_rules('days_teacher','Allowable Borrowing Period for Teacher','required|integer');
+		$this->form_validation->set_rules('days_student','Allowable Borrowing Period for Student','required|integer');
+		$this->form_validation->set_rules('days_outsider','Allowable Borrowing Period for Outsider','required|integer');
+		$this->form_validation->set_rules('num_teacher','Borrowing Limit of Teacher','required|integer');
+		$this->form_validation->set_rules('num_student','Borrowing Limit of Student','required|integer');
+		$this->form_validation->set_rules('num_outsider','Borrowing Limit of Outsider','required|integer');
+		$this->form_validation->set_rules('lost_teacher','Penalty for Lost Book of Teacher','required');
+		$this->form_validation->set_rules('lost_student','Penalty for Lost Book of Student','required');
+		$this->form_validation->set_rules('lost_outsider','Penalty for Lost Book of Outsider','required');
+		$this->form_validation->set_rules('fines_teacher','Penalty for Overdue Books of Teacher','required');
+		$this->form_validation->set_rules('fines_student','Penalty for Overdue Books of Student','required');
+		$this->form_validation->set_rules('fines_outsider','Penalty for Overdue Books of Outsider','required');
+		$this->form_validation->set_rules('broken_teacher','Penalty for damaged book of Teacher','required');
+		$this->form_validation->set_rules('broken_student','Penalty for damaged book of Student','required');
+		$this->form_validation->set_rules('broken_outsider','Penalty for damaged book of Outsider','required');
+
+    $params = array(
+      'id' => $this->input->post('id'),
+      'school' => $this->input->post('school'),
+      'days_teacher' => $this->input->post('days_teacher'),
+      'days_student' => $this->input->post('days_student'),
+      'days_outsider' => $this->input->post('days_outsider'),
+      'num_teacher' => $this->input->post('num_teacher'),
+      'num_student' => $this->input->post('num_student'),
+      'num_outsider' => $this->input->post('num_outsider'),
+      'lost_teacher' => $this->input->post('lost_teacher'),
+      'lost_student' => $this->input->post('lost_student'),
+      'lost_outsider' => $this->input->post('lost_outsider'),
+      'fines_teacher' => $this->input->post('fines_teacher'),
+      'fines_student' => $this->input->post('fines_student'),
+      'fines_outsider' => $this->input->post('fines_outsider'),
+      'broken_teacher' => $this->input->post('broken_teacher'),
+      'broken_student' => $this->input->post('broken_student'),
+      'broken_outsider' => $this->input->post('broken_outsider'),
+    );
+    $checkSettingValue = $this->_checkSettingValue($params);
+
+    if($checkSettingValue){
+      $this->session->set_flashdata('setting', $params);
+  		$this->session->set_flashdata('error_message',  $checkSettingValue);
+      redirect('admin/add/school/settings');
+    }
+		else if($this->form_validation->run())
+    {
+    		$result = $this->Schools_data->updateSetting($params);
+
+        if(isset($result["error_message"])){
+          $this->session->set_flashdata('setting', $params);
+    			$this->session->set_flashdata('error_message',  $result["error_message"]);
+    			redirect('admin/add/school/settings');
+    		}
+    		else{
+    				$this->session->set_flashdata('result', $result);
+    				redirect('admin/add/settings');
+    			}
+    }
+    else
+    {
+      $this->session->set_flashdata('setting', $params);
+      $data['error_message'] = validation_errors();
+  		$data['error_message'] = explode("</p>", $data['error_message']);
+  		$this->session->set_flashdata('error_message',  $data['error_message'][0]);
+  		redirect('admin/add/school/settings');
+    }
+}
+
+	public function deactivateUser(){
 
     $initial = array(
       'schoolId' => $this->input->post('id'),
@@ -608,9 +693,6 @@ class Admin extends CI_Controller {
       'status' => "deactivated",
     );
     $result = $this->Users_data->updateUser($initial,$params);
-
-    $params['userType'] = "teacher";
-    $result['teachers'] = $this->Users_data->get_all_users($params);
 
     if(isset($result["success_message"]))
       echo json_encode($result);
@@ -637,6 +719,39 @@ class Admin extends CI_Controller {
     }
     else
       echo json_encode(null);
+  }
+
+  private function _checkSettingValue($params){
+    if(!floatval($params["lost_teacher"]) && !intval($params["lost_teacher"]) && $params["lost_teacher"] != "0"){
+      return "Penalty for Lost Books of Teacher must be numeric / decimal";
+    }
+    else if(!floatval($params["lost_student"]) && !intval($params["lost_student"]) && $params["lost_student"] != "0"){
+      return "Penalty for Lost Books of Student must be numeric / decimal";
+    }
+    else if(!floatval($params["lost_outsider"]) && !intval($params["lost_outsider"]) && $params["lost_outsider"] != "0"){
+      return "Penalty for Lost Books of Outsider must be numeric / decimal";
+    }
+    else if(!floatval($params["fines_teacher"]) && !intval($params["fines_teacher"]) && $params["fines_teacher"] != "0"){
+      return "Penalty for Overdue Books of Teacher must be numeric / decimal";
+    }
+    else if(!floatval($params["fines_student"]) && !intval($params["fines_student"]) && $params["fines_student"] != "0"){
+      return "Penalty for Overdue Books of Student must be numeric / decimal";
+    }
+    else if(!floatval($params["fines_outsider"]) && !intval($params["fines_outsider"]) && $params["fines_outsider"] != "0"){
+      return "Penalty for Overdue Books of Outsider must be numeric / decimal";
+    }
+    else if(!floatval($params["broken_teacher"]) && !intval($params["broken_teacher"]) && $params["broken_teacher"] != "0"){
+      return "Penalty for damaged Books of Teacher must be numeric / decimal";
+    }
+    else if(!floatval($params["broken_student"]) && !intval($params["broken_student"]) && $params["broken_student"] != "0"){
+      return "Penalty for damaged Books of Student must be numeric / decimal";
+    }
+    else if(!floatval($params["broken_outsider"]) && !intval($params["broken_outsider"]) && $params["broken_outsider"] != "0"){
+      return "Penalty for damaged Books of Outsider must be numeric / decimal";
+    }
+    else{
+      return false;
+    }
   }
 
   private function _checkAdminRights(){
