@@ -94,7 +94,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <li><a href="<?=base_url();?>admin/add/school"><i class="fa fa-circle-o"></i> New</a></li>
         <li><a href="<?=base_url();?>admin/edit/school"><i class="fa fa-circle-o"></i> Update</a></li>
         <li><a href="<?=base_url();?>admin/view/schools"><i class="fa fa-circle-o"></i> View</a></li>
-        <li><a href="<?=base_url();?>admin/view/school/settings"><i class="fa fa-circle-o"></i> Settings</a></li>
       </ul>
     </li>
 	</ul>

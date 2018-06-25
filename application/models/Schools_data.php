@@ -22,6 +22,12 @@ class Schools_data extends CI_Model{
       return $this->db->get_where('school_settings',array('id'=>$id, 'status' => "active"))->row_array();
   }
 
+  function getSchoolsCount()
+  {
+      $this->db->from('School_data');
+      return $this->db->count_all_results();
+  }
+
   function getSchoolSettingsCount()
   {
       $this->db->from('school_settings');
@@ -70,11 +76,12 @@ class Schools_data extends CI_Model{
 		}
 	}
 
-  function updateSetting($id, $params)
+  function updateSetting($params)
     {
+        $id = $params["id"];
         unset($params["id"]);
         $this->db->where('id',$id);
-        return $this->db->update('school_settings',$params);
+        $this->db->update('school_settings',$params);
 
         if($this->db->affected_rows() === 1) {
           $data["success_message"] = $params["school"]."'s settings has been set successfully!";

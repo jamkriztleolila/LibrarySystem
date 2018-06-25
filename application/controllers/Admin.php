@@ -6,6 +6,7 @@ class Admin extends CI_Controller {
   //consturctor
   public function index()
 	{
+    $this->_checkAdminRights();
     $data['user_in'] = $this->session->userdata('user_in');
 		$this->load->view('head');
 		$this->load->view('admin\header', $data);
@@ -15,6 +16,7 @@ class Admin extends CI_Controller {
 	}
 
   public function viewAddTeacher(){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();;
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -26,6 +28,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewEditTeacher($id = "", $school = ""){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -49,6 +52,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewAvailTeacher(){
+    $this->_checkAdminRights();
     $params['school'] = $this->input->post('school');
     $params['userType'] = "teacher";
     $params['status'] = "deactivated";
@@ -56,37 +60,40 @@ class Admin extends CI_Controller {
   }
 
   public function viewInfoTeacher(){
+    $this->_checkAdminRights();
     echo json_encode($this->Users_data->get_user($this->input->post('schoolId'), $this->input->post('school')));
   }
 
   public function viewListTeacher($page = 1){
-      $params['limit'] =  5;
-      $params['offset'] = ($page - 1) * 5;
-      $params['userType'] = "teacher";
+    $this->_checkAdminRights();
+    $params['limit'] =  5;
+    $params['offset'] = ($page - 1) * 5;
+    $params['userType'] = "teacher";
 
-      $view["userType"] = "teacher";
+    $view["userType"] = "teacher";
 
-      $config['base_url'] = base_url()."admin/view/teacher/";
-      $config['total_rows'] = $this->Users_data->get_all_users_count($view);
-      $config['num_links'] = $this->Users_data->get_all_users_count($view);
-      $config['per_page'] = 5;
-      $config['next_link'] = 'Next';
-      $config['prev_link'] = 'Previous';
-      $config['last_link'] = FALSE;
-      $config['first_link'] = FALSE;
-      $this->pagination->initialize($config);
-      $data['users'] = $this->Users_data->get_all_users($params);
-      $data['schools'] = $this->Users_data->getSchools();
-      $data['user_in'] = $this->session->userdata('user_in');
+    $config['base_url'] = base_url()."admin/view/teachers/";
+    $config['total_rows'] = $this->Users_data->get_all_users_count($view);
+    $config['num_links'] = $this->Users_data->get_all_users_count($view);
+    $config['per_page'] = 5;
+    $config['next_link'] = 'Next';
+    $config['prev_link'] = 'Previous';
+    $config['last_link'] = FALSE;
+    $config['first_link'] = FALSE;
+    $this->pagination->initialize($config);
+    $data['users'] = $this->Users_data->get_all_users($params);
+    $data['schools'] = $this->Users_data->getSchools();
+    $data['user_in'] = $this->session->userdata('user_in');
 
-      $this->load->view('head');
-      $this->load->view('admin\header', $data);
-      $this->load->view('admin\nav_main', $data);
-      $this->load->view('admin\view_teacher', $data);
-  		$this->load->view('footer');
+    $this->load->view('head');
+    $this->load->view('admin\header', $data);
+    $this->load->view('admin\nav_main', $data);
+    $this->load->view('admin\view_teacher', $data);
+		$this->load->view('footer');
   }
 
   public function viewAddLibrarian(){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -98,11 +105,13 @@ class Admin extends CI_Controller {
   }
 
   public function viewAvailPosition(){
+    $this->_checkAdminRights();
     $school = $this->input->post('school');
     echo  json_encode($this->Users_data->getAvailPosition($school));
   }
 
   public function viewEditLibrarian(){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -122,6 +131,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewAvailLibrarian(){
+    $this->_checkAdminRights();
     $params['school'] = $this->input->post('school');
     $params['userType'] = "librarian";
     $params['status'] = "deactivated";
@@ -129,17 +139,19 @@ class Admin extends CI_Controller {
   }
 
   public function viewInfoLibrarian(){
+    $this->_checkAdminRights();
     echo json_encode($this->Users_data->get_user($this->input->post('schoolId'), $this->input->post('school')));
   }
 
   public function viewListLibrarian($page = 1){
+    $this->_checkAdminRights();
       $params['limit'] =  5;
       $params['offset'] = ($page - 1) * 5;
       $params['userType'] = "librarian";
 
       $view["userType"] = "librarian";
 
-      $config['base_url'] = base_url()."admin/view/librarian/";
+      $config['base_url'] = base_url()."admin/view/librarians/";
       $config['total_rows'] = $this->Users_data->get_all_users_count($view);
       $config['num_links'] = $this->Users_data->get_all_users_count($view);
       $config['per_page'] = 5;
@@ -160,6 +172,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewAddStudent(){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();;
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -171,6 +184,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewEditStudent(){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();;
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -190,6 +204,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewAvailStudent(){
+    $this->_checkAdminRights();
     $params['school'] = $this->input->post('school');
     $params['userType'] = "student";
     $params['status'] = "deactivated";
@@ -197,37 +212,40 @@ class Admin extends CI_Controller {
   }
 
   public function viewInfoStudent(){
+    $this->_checkAdminRights();
     echo json_encode($this->Users_data->get_user($this->input->post('schoolId'), $this->input->post('school')));
   }
 
   public function viewListStudent($page = 1){
-      $params['limit'] =  5;
-      $params['offset'] = ($page - 1) * 5;
-      $params['userType'] = "student";
+    $this->_checkAdminRights();
+    $params['limit'] =  5;
+    $params['offset'] = ($page - 1) * 5;
+    $params['userType'] = "student";
 
-      $view["userType"] = "student";
+    $view["userType"] = "student";
 
-      $config['base_url'] = base_url()."admin/view/student/";
-      $config['total_rows'] = $this->Users_data->get_all_users_count($view);
-      $config['num_links'] = $this->Users_data->get_all_users_count($view);
-      $config['per_page'] = 5;
-      $config['next_link'] = 'Next';
-      $config['prev_link'] = 'Previous';
-      $config['last_link'] = FALSE;
-      $config['first_link'] = FALSE;
-      $this->pagination->initialize($config);
-      $data['users'] = $this->Users_data->get_all_users($params);
-      $data['schools'] = $this->Users_data->getSchools();
-      $data['user_in'] = $this->session->userdata('user_in');
+    $config['base_url'] = base_url()."admin/view/students/";
+    $config['total_rows'] = $this->Users_data->get_all_users_count($view);
+    $config['num_links'] = $this->Users_data->get_all_users_count($view);
+    $config['per_page'] = 5;
+    $config['next_link'] = 'Next';
+    $config['prev_link'] = 'Previous';
+    $config['last_link'] = FALSE;
+    $config['first_link'] = FALSE;
+    $this->pagination->initialize($config);
+    $data['users'] = $this->Users_data->get_all_users($params);
+    $data['schools'] = $this->Users_data->getSchools();
+    $data['user_in'] = $this->session->userdata('user_in');
 
-      $this->load->view('head');
-      $this->load->view('admin\header', $data);
-      $this->load->view('admin\nav_main', $data);
-      $this->load->view('admin\view_student', $data);
-  		$this->load->view('footer');
+    $this->load->view('head');
+    $this->load->view('admin\header', $data);
+    $this->load->view('admin\nav_main', $data);
+    $this->load->view('admin\view_student', $data);
+		$this->load->view('footer');
   }
 
   public function viewAddSchool(){
+    $this->_checkAdminRights();
     $data['user_in'] = $this->session->userdata('user_in');
 
     $this->load->view('head');
@@ -238,6 +256,7 @@ class Admin extends CI_Controller {
   }
 
   public function viewEdiSchool(){
+    $this->_checkAdminRights();
     $data['schools'] = $this->Users_data->getSchools();;
     $data['user_in'] = $this->session->userdata('user_in');
 
@@ -257,43 +276,43 @@ class Admin extends CI_Controller {
   }
 
   public function viewAvailSchool(){
+    $this->_checkAdminRights();
     $params['school'] = $this->input->post('school');
     $params['status'] = "deactivated";
     echo  json_encode($this->Users_data->get_all_users($params));
   }
 
   public function viewInfoSchool(){
+    $this->_checkAdminRights();
     echo json_encode($this->Users_data->get_user($this->input->post('schoolId'), $this->input->post('school')));
   }
 
   public function viewListSchool($page = 1){
-      $params['limit'] =  5;
-      $params['offset'] = ($page - 1) * 5;
-      $params['userType'] = "student";
+    $this->_checkAdminRights();
+    $params['limit'] =  5;
+    $params['offset'] = ($page - 1) * 5;
 
-      $view["userType"] = "student";
+    $config['base_url'] = base_url()."admin/view/schools/";
+    $config['total_rows'] = $this->Schools_data->getSchoolsCount();
+    $config['num_links'] = $this->Schools_data->getSchoolsCount();
+    $config['per_page'] = 5;
+    $config['next_link'] = 'Next';
+    $config['prev_link'] = 'Previous';
+    $config['last_link'] = FALSE;
+    $config['first_link'] = FALSE;
+    $this->pagination->initialize($config);
+    $data['schools'] = $this->Schools_data->getAllSchools($params);
+    $data['user_in'] = $this->session->userdata('user_in');
 
-      $config['base_url'] = base_url()."admin/view/student/";
-      $config['total_rows'] = $this->Users_data->get_all_users_count($view);
-      $config['num_links'] = $this->Users_data->get_all_users_count($view);
-      $config['per_page'] = 5;
-      $config['next_link'] = 'Next';
-      $config['prev_link'] = 'Previous';
-      $config['last_link'] = FALSE;
-      $config['first_link'] = FALSE;
-      $this->pagination->initialize($config);
-      $data['users'] = $this->Users_data->get_all_users($params);
-      $data['schools'] = $this->Users_data->getSchools();
-      $data['user_in'] = $this->session->userdata('user_in');
-
-      $this->load->view('head');
-      $this->load->view('admin\header', $data);
-      $this->load->view('admin\nav_main', $data);
-      $this->load->view('admin\view_student', $data);
-      $this->load->view('footer');
+    $this->load->view('head');
+    $this->load->view('admin\header', $data);
+    $this->load->view('admin\nav_main', $data);
+    $this->load->view('admin\view_school', $data);
+    $this->load->view('footer');
   }
 
   public function viewDefaultSettings(){
+    $this->_checkAdminRights();
     $data['user_in'] = $this->session->userdata('user_in');
     if(isset($this->session->userdata['school'])){
       $data["setting"] = $this->Schools_data->getSchoolSetting($this->session->userdata['school']["id"]);
@@ -303,8 +322,6 @@ class Admin extends CI_Controller {
       $data["setting"] = $this->session->userdata['setting'];
       $data['school'] = $this->Schools_data->getSchool($this->session->userdata['setting']["school"]);
     }
-    echo "asn". floatval(0.00);
-    echo "asn". intval(0);
     $this->load->view('head');
     $this->load->view('admin\header', $data);
     $this->load->view('admin\nav_main', $data);
@@ -661,7 +678,7 @@ class Admin extends CI_Controller {
 		else if($this->form_validation->run())
     {
     		$result = $this->Schools_data->updateSetting($params);
-
+        print_r($params);
         if(isset($result["error_message"])){
           $this->session->set_flashdata('setting', $params);
     			$this->session->set_flashdata('error_message',  $result["error_message"]);
@@ -669,7 +686,7 @@ class Admin extends CI_Controller {
     		}
     		else{
     				$this->session->set_flashdata('result', $result);
-    				redirect('admin/add/settings');
+    				redirect('admin/view/schools');
     			}
     }
     else
@@ -767,7 +784,7 @@ class Admin extends CI_Controller {
         $this->session->userdata['user_in']['userType'] == 'librarian'){
       redirect('librarian'); //librarian
     }
-    else{
+    else if(!isset($this->session->userdata['user_in'])){
       redirect("OPAC");
     }
   }

@@ -1,13 +1,13 @@
-div class="content-wrapper">
+<div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1>
-      Edit Librarian
+      Schools
     </h1>
     <ol class="breadcrumb">
       <li><a href="<?=base_url()."Admin";?>"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li>Edit</li>
-      <li class="active">Librarian</li>
+      <li>View</li>
+      <li class="active">Schools</li>
     </ol>
   </section>
 
@@ -18,34 +18,31 @@ div class="content-wrapper">
           <div class="box">
               <div class="box-header">
                   <h3 class="box-title">Schools Listing</h3>
-                <div class="box-tools">
-                      <a href="<?php echo site_url('school/add'); ?>" class="btn btn-success btn-sm">Add</a>
-                  </div>
               </div>
               <div class="box-body">
+                <div style="overflow-x:auto;">
                   <table class="table table-striped">
                       <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Address</th>
-              <th>Contact</th>
-              <th>Actions</th>
+                        <th>ID</th>
+                        <th nowrap>Name</th>
+                        <th nowrap>Address</th>
+                        <th nowrap>Contact</th>
+                        <th nowrap>Status</th>
                       </tr>
-              <?php foreach($schools as $s){ ?>
-              <tr>
-                <td><?php echo $s['id']; ?></td>
-                <td><?php echo $s['name']; ?></td>
-                <td><?php echo $s['status']; ?></td>
-                <td>
-                    <a href="<?php echo site_url('school/remove/'.$s['id']); ?>" class="btn btn-xs"><span class="fa fa-eye"></span> View</a>
-                    <a href="<?php echo site_url('school/edit/'.$s['id']); ?>" class="btn btn-info btn-xs"><span class="fa fa-pencil"></span> Edit</a>
-                </td>
-              </tr>
-              <?php } ?>
-            </table>
-            <div class="pull-right">
-                <?php echo $this->pagination->create_links(); ?>
-            </div>
+                      <?php foreach($schools as $s){ ?>
+                      <tr>
+                        <td><?php echo $s['id']; ?></td>
+                        <td nowrap><?php echo $s['name']; ?></td>
+                        <td><?php echo $s['address']; ?></td>
+                        <td nowrap><?php echo $s['contact']; ?></td>
+                        <td nowrap><?php echo $s['status']; ?></td>
+                      </tr>
+                      <?php } ?>
+                  </table>
+                </div>
+                <div class="pull-right">
+                    <?php echo $this->pagination->create_links(); ?>
+                </div>
           </div>
         </div>
       </div>
